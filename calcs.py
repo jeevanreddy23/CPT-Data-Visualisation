@@ -43,3 +43,22 @@ qt_norm = qn / sig1_vo                                                          
 fr_norm = ((fs * 1000) / qn) * 100                                                          #normalised fs
 ic = np.sqrt(np.power(((3.47-(np.log10(qc/0.1)))),2) + np.power(((np.log10(Rf)+1.22)),2))   #Soil Behaviour Type Index
 ##########################################################################################################################################################################
+# Extended SBT Description based on Ic
+conditions = [
+    (ic < 1.31),
+    (ic >= 1.31) & (ic < 2.05),
+    (ic >= 2.05) & (ic < 2.60),
+    (ic >= 2.60) & (ic < 2.95),
+    (ic >= 2.95) & (ic < 3.60),
+    (ic >= 3.60)
+]
+choices = [
+    'Gravelly sand to sand',
+    'Sands: clean sand to silty sand',
+    'Sand mixtures: silty sand to sandy silt',
+    'Silt mixtures: clayey silt to silty clay',
+    'Clays: clay to silty clay',
+    'Organic soils: peats'
+]
+extended_description = np.select(conditions, choices, default='Unknown')
+data_source['Extended Description'] = extended_description
